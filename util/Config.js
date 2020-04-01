@@ -3,9 +3,9 @@ var path = require('path');
 module.exports = {
   getRoot: function() {
     if (__dirname.match(/node_modules[\/\\]@stonescott[\/\\]reduxscripts/)) {
-      return path.resolve(__dirname, '../../..');
+      return '../../../..';
     } else {
-      return path.resolve(__dirname, '../');
+      return '../';
     }
   },
 

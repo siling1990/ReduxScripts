@@ -2,15 +2,15 @@
 /**
  * Created by Stone on 2020/3/5.
  */
-const fs = require("fs");
 const path = require("path");
 const Config = require("../util/Config")
+const FileUtil = require("../util/FileUtil")
 const packageJson = require(Config.getRoot() + '/package.json')
 const moduleName = packageJson.name.split('-').pop()
 let PROJECTPATH = `${Config.getRoot()}/jsbundles/${moduleName}/`
 const ModuleConfig = Config.getConfig()
 if (!ModuleConfig.isJDRN) {
-    PROJECTPATH = Config.getRoot() + "/"+ ModuleConfig.fileFolder + "/"
+    PROJECTPATH = Config.getRoot() + path.sep + ModuleConfig.fileFolder + path.sep
 }
 const actionFolderName = !!ModuleConfig.actionFolderName ? ModuleConfig.actionFolderName : 'Action'
 const reducerFolderName = !!ModuleConfig.reducerFolderName ? ModuleConfig.reducerFolderName : 'Reducers'
@@ -27,73 +27,6 @@ let FOLDERARRY = [
 if (ModuleConfig.otherFloders && ModuleConfig.otherFloders.length > 0) {
     FOLDERARRY = FOLDERARRY.concat(ModuleConfig.otherFloders)
 }
-
-const mkdirs = (pathname) => {
-    // 需要判断是否是绝对路径(避免不必要的bug)
-    pathname = path.isAbsolute(pathname) ? pathname : path.join(__dirname, pathname);
-    // 获取相对路径
-    pathname = path.relative(__dirname, pathname);
-    let floders = pathname.split(path.sep); // path.sep 避免平台差异带来的bug
-    let pre = "";
-    floders.forEach(floder => {
-        try {
-            // 没有异常，文件已经创建，提示用户改文件已经创建
-            let _stat = fs.statSync(path.join(__dirname, pre, floder));
-            let hasMkdir = _stat && _stat.isDirectory();
-            if (hasMkdir) {
-                //console.log(`文件${floder}已经存在，不能重复创建，请重新创建`);
-            }
-        } catch (error) {
-            // 抛出异常，文件不存在则创建文件
-            try {
-                // 避免父文件还没有创建的时候先创建子文件所出现的意外bug,这里选择同步创建文件
-                console.log(`创建目录${pathname}`)
-                fs.mkdirSync(path.join(__dirname, pre, floder));
-                console.log(`目录：${pathname}创建成功`);
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        pre = path.join(pre, floder); // 路径拼合
-    });
-}
-const writeFile = (fileName, content, encode, callback) => {
-    const file = path.join(__dirname, fileName);
-    fs.writeFile(file, content, encode, (error) => {
-        if (error && callback && typeof callback == 'function') {
-            console.log(error);
-        } else {
-            console.log(`文件：${fileName}创建成功`);
-        }
-    })
-}
-const readFile = (fileName, callback) => {
-    const file = path.join(__dirname, fileName);
-    fs.readFile(file, (error, data) => {
-        if (callback && typeof callback == 'function') {
-            callback(error, data)
-        }
-    })
-}
-const appendFile = (fileName, content, encode, callback) => {
-    const file = path.join(__dirname, fileName);
-    fs.appendFile(file, content, encode, (error) => {
-        if (error && callback && typeof callback == "function") {
-            console.log(error);
-        } else {
-            console.log(`文件：${fileName}写入成功`);
-        }
-    })
-}
-const fileExist = (fileName, callback) => {
-    const file = path.join(__dirname, fileName);
-    fs.exists(file, (exists) => {
-        if (callback && typeof callback == "function") {
-            callback(exists)
-        }
-    });
-}
-
 const FILEREDUCER = 'index.js'
 const FILENAV = 'Navigation.js'
 const DEFAULTPAGE = "import PropTypes from 'prop-types';\n" +
@@ -242,19 +175,19 @@ let fileName = process.argv[2]
 console.log(fileName)
 if (!!fileName) {
     for (let i = 0; i < FOLDERARRY.length; i++) {
-        mkdirs(PROJECTPATH + FOLDERARRY[i], (error) => {
+        FileUtil.mkdirs(PROJECTPATH + FOLDERARRY[i], (error) => {
 
         })
     }
     //ActionConstants.js
     console.log(`创建文件${fileName}.js`)
     let page = DEFAULTPAGE.replace(/TEMPNAME/g, fileName)
-    writeFile(`${PROJECTPATH + pageFolderName}/${fileName}.js`, page)
+    FileUtil.writeFile(`${PROJECTPATH + pageFolderName}/${fileName}.js`, page)
 
     if (ModuleConfig.isJDRN) {
-        fileExist(`${PROJECTPATH + pageFolderName}/${FILENAV}`, (exists) => {
+        FileUtil.fileExist(`${PROJECTPATH + pageFolderName}/${FILENAV}`, (exists) => {
             if (exists) {
-                readFile(`${PROJECTPATH + pageFolderName}/${FILENAV}`, (error, data) => {
+                FileUtil.readFile(`${PROJECTPATH + pageFolderName}/${FILENAV}`, (error, data) => {
                     if (error) {
                         console.log(error)
                         console.log(`${PROJECTPATH + pageFolderName}/${FILENAV}\t读取失败`)
@@ -281,12 +214,12 @@ if (!!fileName) {
     }
 
     console.log('创建ActionType')
-    fileExist(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js',(exists)=>{
+    FileUtil.fileExist(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js',(exists)=>{
         let actionType = ACTIONTYPETEMP.replace(/TEMPNAMEUPER/g, fileName.toUpperCase())
         if(exists){
-            appendFile(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js', actionType,'utf8')
+            FileUtil.appendFile(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js', actionType,'utf8')
         }else{
-            writeFile(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js', actionType,'utf8')
+            FileUtil.writeFile(PROJECTPATH + actionTypesFolderName + '/ActionConstants.js', actionType,'utf8')
         }
     })
 
@@ -294,20 +227,20 @@ if (!!fileName) {
     console.log(`创建文件${fileName}Action.js`)
     let actionContent = ACTIONTEMP.replace(/TEMPNAMEUPER/g, fileName.toUpperCase())
     actionContent = actionContent.replace(/TEMPNAME/g, fileName)
-    writeFile(`${PROJECTPATH + actionFolderName}/${fileName}Action.js`, actionContent, 'utf8')
+    FileUtil.writeFile(`${PROJECTPATH + actionFolderName}/${fileName}Action.js`, actionContent, 'utf8')
 
     console.log(`创建文件${fileName}Service.js`)
-    writeFile(`${PROJECTPATH + serviceFolderName}/${fileName}Service.js`, SERVICESTEMP, 'utf8')
+    FileUtil.writeFile(`${PROJECTPATH + serviceFolderName}/${fileName}Service.js`, SERVICESTEMP, 'utf8')
 
 
     console.log(`创建文件${fileName}Reducer.js`)
     let reducerContent = REDUCERTEMP.replace(/TEMPNAMEUPER/g, fileName.toUpperCase())
     reducerContent = reducerContent.replace(/TEMPNAME/g, fileName)
-    writeFile(`${PROJECTPATH + reducerFolderName}/${fileName}Reducer.js`, reducerContent, 'utf8')
+    FileUtil.writeFile(`${PROJECTPATH + reducerFolderName}/${fileName}Reducer.js`, reducerContent, 'utf8')
 
-    fileExist(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, (exists) => {
+    FileUtil.fileExist(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, (exists) => {
         if (exists) {
-            readFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, (error, data) => {
+            FileUtil.readFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, (error, data) => {
                 if (error) {
                     console.log(error)
                     console.log(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}\t读取失败`)
@@ -320,7 +253,7 @@ if (!!fileName) {
                         redNew = `combineReducers({\n\t${fileName}Reducer,`
                         steRed = steRed.replace(/combineReducers\(\{/, redNew)
 
-                        writeFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, steRed, 'utf8')
+                        FileUtil.writeFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, steRed, 'utf8')
                     } else {
                         console.log(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}\t读取失败`)
                     }
@@ -336,12 +269,12 @@ if (!!fileName) {
             redNew = `combineReducers({\n\t${fileName}Reducer,`
             steRed = steRed.replace(/combineReducers\(\{/, redNew)
 
-            writeFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, steRed, 'utf8')
+            FileUtil.writeFile(`${PROJECTPATH + reducerFolderName}/${FILEREDUCER}`, steRed, 'utf8')
         }
     })
 
     console.log(`创建文件${fileName}Service.js`)
-    writeFile(`${PROJECTPATH}Service/${fileName}Service.js`, '', 'utf8')
+    FileUtil.writeFile(`${PROJECTPATH}Service/${fileName}Service.js`, '', 'utf8')
 } else {
     console.log('-h 帮助信息\n -p [fileName] 页面文件名称，会创建redux相关文件')
 }
@@ -360,4 +293,3 @@ if (!!fileName) {
 // } else {
 //     console.log('h 帮助信息\n p [fileName] 页面文件名称，会创建redux相关文件')
 // }
-
