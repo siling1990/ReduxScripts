@@ -1,28 +1,25 @@
 {
   "name": "@stonescott/reduxscripts",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "redux create scripts",
   "main": "index.js",
   "scripts": {
-    "create-page": "./scripts/create-page.js"
+    "auto-redux": "./scripts/index.js"
   },
   "bin": {
-    "autoRedux-init": "./scripts/init-redux.js",
-    "autoRedux-create": "./scripts/create-page.js"
+    "auto-redux": "./scripts/index.js"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/siling1990/ReduxScripts"
   },
   "author": "Stone",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "redux",
     "scripts"
   ],
   "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.9",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0",
     "redux-logger": "~2.7.4",
