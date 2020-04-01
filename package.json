@@ -1,0 +1,31 @@
+{
+  "name": "@stonescott/reduxscripts",
+  "version": "1.0.1",
+  "description": "redux create scripts",
+  "main": "index.js",
+  "scripts": {
+    "create-page": "./scripts/create-page.js"
+  },
+  "bin": {
+    "autoRedux-init": "./scripts/init-redux.js",
+    "autoRedux-create": "./scripts/create-page.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Stone",
+  "license": "ISC",
+  "keywords": [
+    "redux",
+    "scripts"
+  ],
+  "dependencies": {
+    "react": "16.8.3",
+    "react-native": "0.59.9",
+    "react-redux": "^5.0.5",
+    "redux": "^3.6.0",
+    "redux-logger": "~2.7.4",
+    "redux-thunk": "^2.2.0"
+  }
+}
