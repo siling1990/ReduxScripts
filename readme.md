@@ -23,7 +23,7 @@ npm install  @stonescott/reduxscripts
 ###使用
 >npm run auto-redux h  帮助<br>
 
->npm run auto-redux i  初始化，<br>
+>npm run auto-redux i  初始化，建议先运行<br>
 
 创建reudx所需的目录['Action', 'Reducers', 'Page', 'Services', 'Constants', 'Store']，创建redux store 工具文件index.js<br>
 
