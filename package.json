@@ -1,6 +1,6 @@
 {
   "name": "@stonescott/reduxscripts",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "redux create scripts",
   "main": "index.js",
   "scripts": {

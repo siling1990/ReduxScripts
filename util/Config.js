@@ -11,8 +11,13 @@ module.exports = {
 
   getConfig: function() {
     const rootDir = this.getRoot();
-    const config = require(`${rootDir}/reduxconfig`);
-    return config
+    try{
+      const config = require(`${rootDir}/reduxconfig`);
+      return config
+    }catch (e) {
+      const config = require("../reduxconfig");
+      return config
+    }
   }
   
 }
