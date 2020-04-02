@@ -1,6 +1,6 @@
 {
   "name": "@stonescott/reduxscripts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "redux create scripts",
   "main": "index.js",
   "scripts": {
@@ -18,11 +18,5 @@
   "keywords": [
     "redux",
     "scripts"
-  ],
-  "dependencies": {
-    "react-redux": "^5.0.5",
-    "redux": "^3.6.0",
-    "redux-logger": "~2.7.4",
-    "redux-thunk": "^2.2.0"
-  }
+  ]
 }

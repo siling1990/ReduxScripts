@@ -7,5 +7,5 @@ module.exports = {
     actionTypesFolderName:"Constants",//actionTypes目录名
     reducerFolderName:"Reducers",//reducer目录名
     serviceFolderName:"Services",//service目录名
-    otherFloders:[]//其他目录名
+    otherFolders:[]//其他目录名
 }

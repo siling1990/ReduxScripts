@@ -295,7 +295,7 @@ function init() {
                     console.log("../model/ReduxStore.js读取失败")
                 } else {
                     if (data && !!data.toString()) {
-                        FileUtil.writeFile(`${PROJECTPATH}Store/index.js`, data.toString(), 'utf8')
+                        FileUtil.writeFile(`${PROJECTPATH}Store/ReduxStore.js`, data.toString(), 'utf8')
                     } else {
                         console.log("../model/ReduxStore.js读取失败")
                     }
@@ -304,6 +304,24 @@ function init() {
         } else {
             console.log("创建Store失败");
         }
+    })
+    let rootDir = Config.getRoot()
+    //初始化配置文件
+    FileUtil.fileExist(`${rootDir}/reduxconfig.js`, (exists) => {
+        if (!exists) {
+            FileUtil.readFile("../reduxconfig.js", (error, data) => {
+                if (error) {
+                    console.log(error)
+                    console.log("reduxconfig.js读取失败")
+                } else {
+                    if (data && !!data.toString()) {
+                        FileUtil.writeFile(`${rootDir}/reduxconfig.js`, data.toString(), 'utf8')
+                    } else {
+                        console.log("reduxconfig.js读取失败")
+                    }
+                }
+            })
+        } 
     })
 
 }
