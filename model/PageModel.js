@@ -49,7 +49,7 @@ export default connect((state) => {
 
 const styles = StyleSheet.create({
     titleStyle: {
-        fontSize: JDDevice.getRpx(32),
+        fontSize: 16,
         color: '#fff',
     },
     container: {
